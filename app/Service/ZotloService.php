@@ -46,4 +46,23 @@ class ZotloService
 
         return true;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function getSubscriber(string $subscriberUniqueHash): array
+    {
+        $response = Http::zotlo()->get('v1/subscription/profile', [
+            'subscriberId' => $subscriberUniqueHash,
+            'packageId' => config('zotlo.package_id'),
+        ]);
+
+        if ($response->failed()) {
+            logger()->error($response->body());
+
+            throw new \Exception();
+        }
+
+        return $response->json();
+    }
 }
