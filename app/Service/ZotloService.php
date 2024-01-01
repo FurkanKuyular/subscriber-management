@@ -86,4 +86,22 @@ class ZotloService
 
         return true;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function getSubscriberCards(string $subscriberUniqueHash): array
+    {
+        $response = Http::zotlo()->get('/v1/subscription/card-list', [
+            'subscriberId' => $subscriberUniqueHash,
+        ]);
+
+        if ($response->failed()) {
+            logger()->error($response->body());
+
+            throw new \Exception();
+        }
+
+        return $response->json();
+    }
 }
