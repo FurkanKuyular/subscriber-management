@@ -18,5 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('subscribers', SubscriptionController::class)->only('store');
+    Route::apiResource('subscribers', SubscriptionController::class)
+        ->only('store', 'show', 'index');
 });

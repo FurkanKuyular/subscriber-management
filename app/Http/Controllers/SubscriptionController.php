@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Events\SubscriberCreated;
 use App\Http\Requests\SubscriptionStoreRequest;
+use App\Http\Resources\SubscriberCollection;
 use App\Models\Subscriber;
+use App\Service\ZotloService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionController extends Controller
 {
+    public function index(): SubscriberCollection
+    {
+        return new SubscriberCollection(auth()->user()->subscribers()->paginate());
+    }
+
     public function store(SubscriptionStoreRequest $request): JsonResponse
     {
         DB::beginTransaction();
@@ -37,5 +43,15 @@ class SubscriptionController extends Controller
         DB::commit();
 
         return response()->json([], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function show(int $subscriberId, ZotloService $service): JsonResponse
+    {
+        $subscriber = auth()->user()->subscribers()->where('id', $subscriberId)->firstOrFail();
+
+        return response()->json($service->getSubscriber($subscriber->unique_hash));
     }
 }
