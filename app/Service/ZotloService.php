@@ -52,7 +52,7 @@ class ZotloService
      */
     public function getSubscriber(string $subscriberUniqueHash): array
     {
-        $response = Http::zotlo()->get('v1/subscription/profile', [
+        $response = Http::zotlo()->get('/v1/subscription/profile', [
             'subscriberId' => $subscriberUniqueHash,
             'packageId' => config('zotlo.package_id'),
         ]);
@@ -64,5 +64,26 @@ class ZotloService
         }
 
         return $response->json();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function cancelSubscriber(string $subscriberUniqueHash, string $reason, bool $forceCancellation): bool
+    {
+        $response = Http::zotlo()->post('/v1/subscription/cancellation', [
+            'subscriberId' => $subscriberUniqueHash,
+            'packageId' => config('zotlo.package_id'),
+            'cancellationReason' => $reason,
+            'force' => $forceCancellation,
+        ]);
+
+        if ($response->failed()) {
+            logger()->error($response->body());
+
+            throw new \Exception();
+        }
+
+        return true;
     }
 }

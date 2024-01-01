@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\SubscriberCreated;
+use App\Http\Requests\SubscriberDestroyRequest;
 use App\Http\Requests\SubscriptionStoreRequest;
 use App\Http\Resources\SubscriberCollection;
 use App\Models\Subscriber;
@@ -53,5 +54,21 @@ class SubscriptionController extends Controller
         $subscriber = auth()->user()->subscribers()->where('id', $subscriberId)->firstOrFail();
 
         return response()->json($service->getSubscriber($subscriber->unique_hash));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function destroy(int $subscriberId, SubscriberDestroyRequest $request, ZotloService $service): JsonResponse
+    {
+        $subscriber = auth()->user()->subscribers()->where('id', $subscriberId)->firstOrFail();
+
+        $service->cancelSubscriber(
+            $subscriber->unique_hash,
+            $request->get('reason'),
+            $request->get('force_cancellation')
+        );
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
