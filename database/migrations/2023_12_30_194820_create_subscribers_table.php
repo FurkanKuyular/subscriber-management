@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('expire_year', 4);
             $table->string('cvv', 3);
             $table->string('unique_hash');
+            $table->boolean('is_active')->default(false);
+            $table->dateTime('expired_at')->nullable();
+            $table->dateTime('cancelled_at')->nullable();
             $table->timestamps();
         });
     }

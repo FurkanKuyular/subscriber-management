@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Subscriber extends Model
 {
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     protected $fillable = [
         'card_number',
         'card_owner',
@@ -14,12 +19,10 @@ class Subscriber extends Model
         'expire_year',
         'cvv',
         'unique_hash',
+        'is_active',
+        'expired_at',
+        'cancelled_at',
     ];
-
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
-    }
 
     public function user(): User
     {

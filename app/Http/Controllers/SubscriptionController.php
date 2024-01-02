@@ -53,7 +53,7 @@ class SubscriptionController extends Controller
     {
         $subscriber = auth()->user()->subscribers()->where('id', $subscriberId)->firstOrFail();
 
-        return response()->json($service->getSubscriber($subscriber->unique_hash));
+        return response()->json($service->getSubscriber($subscriber->unique_hash)->json());
     }
 
     /**
@@ -68,6 +68,9 @@ class SubscriptionController extends Controller
             $request->get('reason'),
             $request->get('force_cancellation')
         );
+
+        $subscriber->cancelled_at = now();
+        $subscriber->save();
 
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
