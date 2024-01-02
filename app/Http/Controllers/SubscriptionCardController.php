@@ -14,6 +14,6 @@ class SubscriptionCardController extends Controller
     {
         $subscriber = auth()->user()->subscribers()->where('id', $subscriberId)->firstOrFail();
 
-        return response()->json($service->getSubscriberCards($subscriber->unique_hash));
+        return response()->json($service->getSubscriberCards($subscriber->unique_hash)->json());
     }
 }

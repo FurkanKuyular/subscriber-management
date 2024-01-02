@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Models\Subscriber;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
@@ -13,6 +15,7 @@ class ZotloService
      */
     public function createSubscriber(Subscriber $subscriber, Collection $collection): bool
     {
+        /** @var Response $response */
         $response = Http::zotlo()->post('/v1/payment/credit-card', [
             'cardNo' => $subscriber->card_number,
             'cardOwner' => $subscriber->card_owner,
@@ -44,13 +47,18 @@ class ZotloService
             throw new \Exception();
         }
 
+        $subscriber->expired_at = Carbon::parse($response->collect('result.profile')->get('expireDate'));
+        $subscriber->is_active = $response->collect('result.profile')->get('status') === 'active';
+
+        $subscriber->save();
+
         return true;
     }
 
     /**
      * @throws \Exception
      */
-    public function getSubscriber(string $subscriberUniqueHash): array
+    public function getSubscriber(string $subscriberUniqueHash): Response
     {
         $response = Http::zotlo()->get('/v1/subscription/profile', [
             'subscriberId' => $subscriberUniqueHash,
@@ -63,7 +71,7 @@ class ZotloService
             throw new \Exception();
         }
 
-        return $response->json();
+        return $response;
     }
 
     /**
@@ -90,7 +98,7 @@ class ZotloService
     /**
      * @throws \Exception
      */
-    public function getSubscriberCards(string $subscriberUniqueHash): array
+    public function getSubscriberCards(string $subscriberUniqueHash): Response
     {
         $response = Http::zotlo()->get('/v1/subscription/card-list', [
             'subscriberId' => $subscriberUniqueHash,
@@ -102,6 +110,6 @@ class ZotloService
             throw new \Exception();
         }
 
-        return $response->json();
+        return $response;
     }
 }
