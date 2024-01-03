@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "c2af6520-cc6e-41e8-a211-e08b3616f764",
+		"name": "Subscriber Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8250614"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseCode = pm.response.code;",
+									"",
+									"if (responseCode === 200) {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    postman.setEnvironmentVariable(\"api_token\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"superadmin@admin.com\",\n    \"password\": \"Test123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8005/api/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriber",
+			"item": [
+				{
+					"name": "Create Subscriber",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"card_number\": \"4111111111111111\",\n    \"card_owner\": \"John Doe\",\n    \"expire_month\": 6,\n    \"expire_year\": 2024,\n    \"cvv\": 332,\n    \"quantity\": 1,\n    \"x_ip\": \"192.168.2.2\",\n    \"discount_percent\": 0,\n    \"force_3ds\": false,\n    \"use_wallet\": false,\n    \"language\": \"TR\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscribers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscriber",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers/1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subscriber",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Kullanıcı abonelikten çıkmayı talep etti.\",\n    \"force_cancellation\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers/17",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers",
+								"17"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriber Card",
+			"item": [
+				{
+					"name": "Get Subscriber Cards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers/1/cards",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers",
+								"1",
+								"cards"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscription Callback",
+			"item": [
+				{
+					"name": "Callback",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"queue\": {\n        \"type\": \"SubscriberUpdate\",\n        \"eventType\": \"newSubscriber\",\n        \"requestID\": \"1721a221-f646-4d41-955b-91a35d630920\",\n        \"createDate\": {\n            \"date\": \"2023-11-14 01:22:11.888000\",\n            \"timezone_type\": 3,\n            \"timezone\": \"UTC\"\n        },\n        \"appId\": 1\n    },\n    \"parameters\": {\n        \"profile\": {\n            \"status\": \"active\",\n            \"realStatus\": \"active\",\n            \"subscriberId\": \"0f7b86c126c400f6ff7b616b36c23010\",\n            \"subscriptionId\": 1000,\n            \"subscriptionType\": \"paid\",\n            \"startDate\": \"2023-08-24 01:21:46\",\n            \"expireDate\": \"2023-11-30 01:21:46\",\n            \"renewalDate\": \"2023-11-30 01:21:46\",\n            \"package\": \"premium.package\",\n            \"country\": \"TR\",\n            \"phoneNumber\": \"+905555555555\",\n            \"language\": \"tr\",\n            \"originalTransactionId\": \"6e7f48f3-6856-4239-a276-f452a8395f1a\",\n            \"lastTransactionId\": \"6e7f48f3-6856-4239-a276-f452a8395f1a\",\n            \"subscriptionPackageType\": \"single\",\n            \"cancellation\": null,\n            \"customParameters\": {}\n        },\n        \"package\": {\n            \"packageId\": \"premium.package\",\n            \"price\": 99,\n            \"currency\": \"TRY\",\n            \"packageType\": \"subscription\",\n            \"name\": \"Premium Package\",\n            \"subscriptionPackageType\": \"single\",\n            \"bundlePackages\": []\n        },\n        \"newPackage\": null,\n        \"card\": {\n            \"cardNumber\": \"411111****1111\",\n            \"expireDate\": \"06/30\"\n        },\n        \"customer\": null\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8005/api/subscribers/callback",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8005",
+							"path": [
+								"api",
+								"subscribers",
+								"callback"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
