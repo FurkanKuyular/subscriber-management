@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubscriptionCallbackController;
 use App\Http\Controllers\SubscriptionCardController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('subscribers', SubscriptionController::class)->except('update');
     Route::apiResource('subscribers.cards', SubscriptionCardController::class)->only('index');
 });
+
+Route::apiResource('subscribers/callback', SubscriptionCallbackController::class)->only('store');
